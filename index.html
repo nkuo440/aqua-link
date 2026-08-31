@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aqua Link | School Water Network</title>
+
+<style>
+:root{
+  --blue:#087ea4;
+  --deep:#07506a;
+  --cyan:#18b6d9;
+  --ink:#12313b;
+  --muted:#6c858d;
+  --bg:#f4fafb;
+  --card:#fff;
+  --line:#dcecef;
+  --green:#19a974;
+  --amber:#e7a21a;
+  --red:#dc4b4b;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+  background:var(--bg);
+  color:var(--ink)
+}
+
+button,input,select,textarea{
+  font:inherit
+}
+
+button{
+  cursor:pointer
+}
+
+.app{
+  min-height:100vh;
+  max-width:1180px;
+  margin:auto;
+  background:var(--bg)
+}
+
+.topbar{
+  height:72px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  position:sticky;
+  top:0;
+  z-index:10
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:850;
+  color:var(--deep);
+  font-size:21px
+}
+
+.drop{
+  width:37px;
+  height:43px;
+  background:linear-gradient(160deg,var(--cyan),var(--blue));
+  clip-path:path("M18.5 0 C18.5 0 0 20 0 27.5 C0 36 8.3 43 18.5 43 C28.7 43 37 36 37 27.5 C37 20 18.5 0 18.5 0Z");
+}
+
+.user{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#e8f7fa;
+  display:grid;
+  place-items:center;
+  color:var(--deep);
+  font-weight:800
+}
+
+main{
+  padding:28px 22px 100px
+}
+
+.hero{
+  background:linear-gradient(135deg,#064f69,#0787a9 60%,#19b6d2);
+  color:white;
+  border-radius:25px;
+  padding:30px;
+  position:relative;
+  overflow:hidden
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  right:-70px;
+  top:-90px;
+  background:rgba(255,255,255,.09)
+}
+
+.hero h1{
+  margin:0 0 7px;
+  font-size:34px;
+  letter-spacing:-1px
+}
+
+.hero p{
+  margin:0;
+  opacity:.88
+}
+
+.school-status{
+  margin-top:24px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:17px;
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px
+}
+
+.status-dot{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight:750
+}
+
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#45df9c;
+  box-shadow:0 0 0 5px rgba(69,223,156,.14)
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin-top:18px
+}
+
+.action{
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:20px;
+  padding:20px;
+  text-align:left;
+  min-height:130px;
+  box-shadow:0 4px 18px rgba(8,73,91,.05);
+  transition:.18s
+}
+
+.action:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px rgba(8,73,91,.1)
+}
+
+.action.primary{
+  background:#e7f8fb;
+  border-color:#bfeaf2
+}
+
+.icon{
+  font-size:28px;
+  margin-bottom:12px
+}
+
+.action h3{
+  margin:0 0 5px
+}
+
+.action p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px
+}
+
+.section{
+  margin-top:28px
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px
+}
+
+.section-head h2{
+  font-size:20px;
+  margin:0
+}
+
+.link{
+  border:0;
+  background:none;
+  color:var(--blue);
+  font-weight:750
+}
+
+.status-card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+
+.status-big{
+  display:flex;
+  gap:13px;
+  align-items:center
+}
+
+.status-icon{
+  width:45px;
+  height:45px;
+  border-radius:14px;
+  background:#e9f8f2;
+  display:grid;
+  place-items:center;
+  font-size:21px
+}
+
+.kpi{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px
+}
+
+.pill{
+  background:#f1f7f8;
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:12px;
+  font-weight:700;
+  color:#526d75
+}
+
+.report-list{
+  display:grid;
+  gap:11px
+}
+
+.report{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:16px;
+  display:flex;
+  gap:13px;
+  align-items:flex-start
+}
+
+.report .r-icon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:#eef8fa;
+  display:grid;
+  place-items:center;
+  font-size:20px
+}
+
+.report h4{
+  margin:0 0 4px
+}
+
+.report p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px
+}
+
+.badge{
+  margin-left:auto;
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap
+}
+
+.progress{
+  background:#fff3d8;
+  color:#9b6900
+}
+
+.resolved{
+  background:#e6f8ef;
+  color:#137b53
+}
+
+.open{
+  background:#fdeaea;
+  color:#b63b3b
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(1180px,100%);
+  height:76px;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20
+}
+
+.nav{
+  border:0;
+  background:none;
+  color:#789097;
+  font-size:11px;
+  font-weight:700;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px
+}
+
+.nav span{
+  font-size:22px
+}
+
+.nav.active{
+  color:var(--blue)
+}
+
+.nav.report-btn{
+  margin-top:-27px
+}
+
+.nav.report-btn span{
+  background:var(--blue);
+  color:white;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  box-shadow:0 8px 20px rgba(8,126,164,.3);
+  border:5px solid var(--bg)
+}
+
+.map-panel{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:20px;
+  overflow:hidden
+}
+
+.map{
+  height:340px;
+  background:
+    radial-gradient(circle at 25% 35%,rgba(24,182,217,.16) 0 45px,transparent 46px),
+    linear-gradient(30deg,transparent 47%,#d7e8eb 48% 49%,transparent 50%),
+    linear-gradient(145deg,transparent 47%,#d7e8eb 48% 49%,transparent 50%),#edf5f6;
+  position:relative
+}
+
+.road{
+  position:absolute;
+  background:#fff;
+  border:2px solid #dce7e9;
+  transform:rotate(-17deg);
+  width:120%;
+  height:34px;
+  top:145px;
+  left:-20%
+}
+
+.road.r2{
+  transform:rotate(38deg);
+  top:210px
+}
+
+.pin{
+  position:absolute;
+  width:18px;
+  height:18px;
+  border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);
+  box-shadow:0 3px 8px rgba(0,0,0,.15);
+  border:3px solid white
+}
+
+.pin i{
+  display:block;
+  width:6px;
+  height:6px;
+  background:white;
+  border-radius:50%;
+  margin:3px
+}
+
+.p1{
+  left:23%;
+  top:28%;
+  background:var(--green)
+}
+
+.p2{
+  left:54%;
+  top:44%;
+  background:var(--amber)
+}
+
+.p3{
+  left:72%;
+  top:28%;
+  background:var(--red)
+}
+
+.p4{
+  left:42%;
+  top:70%;
+  background:var(--green)
+}
+
+.map-legend{
+  padding:13px;
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  font-size:12px;
+  font-weight:700;
+  color:#61777d
+}
+
+.legend{
+  display:flex;
+  align-items:center;
+  gap:5px
+}
+
+.mini{
+  width:9px;
+  height:9px;
+  border-radius:50%
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(5,34,42,.5);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:50
+}
+
+.modal.show{
+  display:flex
+}
+
+.sheet{
+  background:white;
+  width:min(620px,100%);
+  border-radius:26px 26px 0 0;
+  padding:23px;
+  max-height:92vh;
+  overflow:auto
+}
+
+.handle{
+  width:45px;
+  height:5px;
+  background:#d6e2e5;
+  border-radius:99px;
+  margin:0 auto 20px
+}
+
+.sheet h2{
+  margin:0 0 6px
+}
+
+.sheet-sub{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:20px
+}
+
+.choices{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px
+}
+
+.choice{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:15px;
+  padding:15px;
+  text-align:left
+}
+
+.choice.selected{
+  border:2px solid var(--blue);
+  background:#eefaff
+}
+
+.choice b{
+  display:block;
+  margin-top:5px
+}
+
+.field{
+  margin:17px 0
+}
+
+.field label{
+  display:block;
+  font-weight:750;
+  font-size:13px;
+  margin-bottom:7px
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  border:1px solid #cfdee1;
+  border-radius:13px;
+  padding:12px;
+  outline:none
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical
+}
+
+.submit{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:14px;
+  background:var(--blue);
+  color:white;
+  font-weight:850
+}
+
+.close{
+  float:right;
+  border:0;
+  background:#f1f6f7;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  font-size:18px
+}
+
+.toast{
+  position:fixed;
+  bottom:92px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#12313b;
+  color:#fff;
+  padding:13px 17px;
+  border-radius:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:80;
+  font-size:13px;
+  font-weight:700
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0)
+}
+
+@media(min-width:760px){
+  .grid{
+    grid-template-columns:repeat(4,1fr)
+  }
+
+  .hero h1{
+    font-size:42px
+  }
+
+  .bottom{
+    display:none
+  }
+
+  .app{
+    box-shadow:0 0 45px rgba(8,73,91,.06);
+    min-height:100vh
+  }
+
+  main{
+    padding-bottom:40px
+  }
+
+  .modal{
+    align-items:center
+  }
+
+  .sheet{
+    border-radius:25px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+  <div class="brand">
+    <div class="drop"></div>
+    Aqua Link
+  </div>
+
+  <div class="user">ON</div>
+</header>
+
+<main>
+
+<section class="hero">
+
+<h1>Your school. Your water. Your voice.</h1>
+
+<p>Connect water problems to people who can act.</p>
+
+<div class="school-status">
+
+<div>
+<div style="font-size:12px;opacity:.75">MY SCHOOL</div>
+
+<strong>Riverside High School</strong>
+
+<div style="font-size:12px;opacity:.75;margin-top:3px">
+1 Hawthorne St, Three Rivers, Vereeniging, 1935
+</div>
+</div>
+
+<div class="status-dot">
+<span class="dot"></span>
+Operating normally
+</div>
+
+</div>
+
+</section>
+
+
+<div class="grid">
+
+<button class="action primary" onclick="openReport()">
+
+<div class="icon">🚨</div>
+
+<h3>Report a problem</h3>
+
+<p>
+Leak, no water, sanitation or other issue.
+</p>
+
+</button>
+
+
+<button class="action" onclick="showMap()">
+
+<div class="icon">🗺️</div>
+
+<h3>School water map</h3>
+
+<p>
+See water status and reports around schools.
+</p>
+
+</button>
+
+
+<button class="action" onclick="showReports()">
+
+<div class="icon">📋</div>
+
+<h3>My reports</h3>
+
+<p>
+Track reports from submission to resolution.
+</p>
+
+</button>
+
+
+<button class="action"
+onclick="toast('Aqua Challenges are coming soon 💧')">
+
+<div class="icon">🏆</div>
+
+<h3>Aqua Challenge</h3>
+
+<p>
+Learn, act and improve your school's water score.
+</p>
+
+</button>
+
+
+<button class="action" onclick="openInquiry()">
+
+<div class="icon">📩</div>
+
+<h3>DWS Inquiry</h3>
+
+<p>
+Request information or assistance from the Department of Water and Sanitation.
+</p>
+
+</button>
+
+</div>
+
+
+<section class="section">
+
+<div class="section-head">
+
+<h2>School water status</h2>
+
+<button class="link"
+onclick="toast('Status refreshed just now')">
+Refresh
+</button>
+
+</div>
+
+
+<div class="status-card">
+
+<div class="status-big">
+
+<div class="status-icon">💧</div>
+
+<div>
+
+<strong style="font-size:18px">
+Operating normally
+</strong>
+
+<div style="color:var(--muted);font-size:13px;margin-top:3px">
+Last checked 8 minutes ago
+</div>
+
+</div>
+
+</div>
+
+<div style="font-weight:850;color:var(--green)">
+GOOD
+</div>
+
+</div>
+
+
+<div class="kpi">
+
+<span class="pill">7 reports this month</span>
+
+<span class="pill">5 resolved</span>
+
+<span class="pill">2 in progress</span>
+
+</div>
+
+</section>
+
+
+<section class="section" id="reportsSection">
+
+<div class="section-head">
+
+<h2>Recent reports</h2>
+
+<button class="link"
+onclick="showReports()">
+View all
+</button>
+
+</div>
+
+
+<div class="report-list">
+
+<div class="report">
+
+<div class="r-icon">🚰</div>
+
+<div>
+
+<h4>Broken tap</h4>
+
+<p>
+Block B · Report #AL-1024
+</p>
+
+</div>
+
+<span class="badge progress">
+In progress
+</span>
+
+</div>
+
+
+<div class="report">
+
+<div class="r-icon">💧</div>
+
+<div>
+
+<h4>Water leak</h4>
+
+<p>
+Sports field · Report #AL-1023
+</p>
+
+</div>
+
+<span class="badge resolved">
+Resolved
+</span>
+
+</div>
+
+
+<div class="report">
+
+<div class="r-icon">🚱</div>
+
+<div>
+
+<h4>Water interruption</h4>
+
+<p>
+Science block · Report #AL-1021
+</p>
+
+</div>
+
+<span class="badge resolved">
+Resolved
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section" id="mapSection" style="display:none">
+
+<div class="section-head">
+
+<h2>School water map</h2>
+
+<button class="link" onclick="hideMap()">
+Close
+</button>
+
+</div>
+
+
+<div class="map-panel">
+
+<div id="realMap" style="height:340px"></div>
+
+
+<div class="map-legend">
+
+<span class="legend">
+<i class="mini" style="background:var(--green)"></i>
+Good
+</span>
+
+<span class="legend">
+<i class="mini" style="background:var(--amber)"></i>
+Attention
+</span>
+
+<span class="legend">
+<i class="mini" style="background:var(--red)"></i>
+Critical
+</span>
+
+</div>
+
+
+<div style="padding:10px 13px;font-size:11px;color:var(--muted)">
+
+Map data © OpenStreetMap contributors ·
+
+<a
+href="https://www.openstreetmap.org/copyright"
+target="_blank"
+rel="noopener">
+ODbL
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="section" id="inquirySection" style="display:none">
+
+<div class="section-head">
+
+<h2>DWS Inquiry</h2>
+
+<button class="link" onclick="hideInquiry()">
+Close
+</button>
+
+</div>
+
+
+<div class="status-card" style="display:block">
+
+<div style="display:flex;gap:12px;align-items:center">
+
+<div class="status-icon">
+📩
+</div>
+
+<div>
+
+<strong style="font-size:18px">
+Request information or assistance
+</strong>
+
+<div style="color:var(--muted);font-size:13px;margin-top:3px">
+Send a structured inquiry for follow-up.
+</div>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>School</label>
+
+<input
+id="inqSchool"
+value="Riverside High School">
+
+</div>
+
+
+<div class="field">
+
+<label>School location</label>
+
+<input
+id="inqLocation"
+value="1 Hawthorne St, Three Rivers, Vereeniging, 1935">
+
+</div>
+
+
+<div class="field">
+
+<label>Inquiry category</label>
+
+<select id="inqCategory">
+
+<option>Water supply</option>
+<option>Water quality</option>
+<option>Sanitation</option>
+<option>Infrastructure</option>
+<option>Water conservation</option>
+<option>Aqua Enduro / World Water Monitoring Day</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>Your question or request</label>
+
+<textarea
+id="inqMessage"
+placeholder="Explain what information or assistance you need...">
+</textarea>
+
+</div>
+
+
+<div class="field">
+
+<label>Supporting evidence (optional)</label>
+
+<input
+id="inqFile"
+type="file"
+accept="image/*,.pdf,.doc,.docx">
+
+</div>
+
+
+<div class="field">
+
+<label>Contact email</label>
+
+<input
+id="inqEmail"
+type="email"
+placeholder="school@example.org">
+
+</div>
+
+
+<button
+class="submit"
+onclick="submitInquiry()">
+
+Submit inquiry
+
+</button>
+
+</div>
+
+</section>
+
+</main>
+
+
+<nav class="bottom">
+
+<button
+class="nav active"
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+<span>⌂</span>
+Home
+
+</button>
+
+
+<button
+class="nav"
+onclick="showMap()">
+
+<span>⌖</span>
+Map
+
+</button>
+
+
+<button
+class="nav report-btn"
+onclick="openReport()">
+
+<span>＋</span>
+Report
+
+</button>
+
+
+<button
+class="nav"
+onclick="showReports()">
+
+<span>▤</span>
+Reports
+
+</button>
+
+
+<button
+class="nav"
+onclick="openInquiry()">
+
+<span>✉</span>
+DWS
+
+</button>
+
+
+<button
+class="nav"
+onclick="toast('Profile coming soon')">
+
+<span>◉</span>
+Profile
+
+</button>
+
+</nav>
+
+</div>
+
+
+<div class="modal" id="modal">
+
+<div class="sheet">
+
+<button
+class="close"
+onclick="closeReport()">
+×
+</button>
+
+<div class="handle"></div>
+
+<h2>Report a water problem</h2>
+
+<div class="sheet-sub">
+It only takes a few steps. Your report will receive a tracking number.
+</div>
+
+
+<div class="field">
+
+<label>1. What is happening?</label>
+
+<div class="choices">
+
+<button class="choice" onclick="selectChoice(this)">
+🚰
+<b>Broken tap</b>
+</button>
+
+<button class="choice" onclick="selectChoice(this)">
+💧
+<b>Leak</b>
+</button>
+
+<button class="choice" onclick="selectChoice(this)">
+🚱
+<b>No water</b>
+</button>
+
+<button class="choice" onclick="selectChoice(this)">
+🚽
+<b>Sanitation</b>
+</button>
+
+<button class="choice" onclick="selectChoice(this)">
+🧪
+<b>Water quality</b>
+</button>
+
+<button class="choice" onclick="selectChoice(this)">
+⚠️
+<b>Other</b>
+</button>
+
+</div>
+
+</div>
+
+
+<div class="field">
+
+<label>2. Where is it?</label>
+
+<select>
+
+<option>Choose a school area</option>
+<option>Block A</option>
+<option>Block B</option>
+<option>Science block</option>
+<option>Sports field</option>
+<option>Hall</option>
+
+</select>
+
+</div>
+
+
+<div class="field">
+
+<label>3. Describe the problem</label>
+
+<textarea placeholder="Tell us what you saw..."></textarea>
+
+</div>
+
+
+<div class="field">
+
+<label>4. Evidence (optional)</label>
+
+<input
+type="file"
+accept="image/*">
+
+</div>
+
+
+<button
+class="submit"
+onclick="submitReport()">
+
+Submit report
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+const school = {
+  lat:-26.6745,
+  lon:27.9274,
+  name:"Riverside High School"
+};
+
+let realMap, schoolMarker;
+
+
+function initMap(){
+
+  if(realMap) return;
+
+  realMap = L.map("realMap")
+    .setView(
+      [school.lat, school.lon],
+      16
+    );
+
+  L.tileLayer(
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom:19,
+      attribution:"&copy; OpenStreetMap contributors"
+    }
+  ).addTo(realMap);
+
+
+  schoolMarker =
+    L.marker(
+      [school.lat, school.lon]
+    )
+    .addTo(realMap)
+
+    .bindPopup(
+      "<b>Riverside High School</b><br>" +
+      "1 Hawthorne St, Three Rivers, Vereeniging, 1935<br><br>" +
+      "🟢 Water status: Operating normally"
+    );
+
+
+  schoolMarker.openPopup();
+
+
+  setTimeout(
+    ()=>realMap.invalidateSize(),
+    150
+  );
+
+}
+
+
+function openReport(){
+
+  document
+    .getElementById('modal')
+    .classList
+    .add('show');
+
+}
+
+
+function closeReport(){
+
+  document
+    .getElementById('modal')
+    .classList
+    .remove('show');
+
+}
+
+
+function selectChoice(el){
+
+  document
+    .querySelectorAll('.choice')
+    .forEach(
+      x=>x.classList.remove('selected')
+    );
+
+  el.classList.add('selected');
+
+}
+
+
+function submitReport(){
+
+  closeReport();
+
+  toast(
+    'Report submitted • #AL-' +
+    Math.floor(1000+Math.random()*8999)
+  );
+
+}
+
+
+function toast(msg){
+
+  const t =
+    document.getElementById('toast');
+
+  t.textContent = msg;
+
+  t.classList.add('show');
+
+  setTimeout(
+    ()=>t.classList.remove('show'),
+    2600
+  );
+
+}
+
+
+function showMap(){
+
+  const s =
+    document.getElementById('mapSection');
+
+  s.style.display='block';
+
+  s.scrollIntoView({
+    behavior:'smooth'
+  });
+
+  setTimeout(
+    initMap,
+    200
+  );
+
+}
+
+
+function hideMap(){
+
+  document
+    .getElementById('mapSection')
+    .style
+    .display='none';
+
+}
+
+
+function showReports(){
+
+  document
+    .getElementById('reportsSection')
+    .scrollIntoView({
+      behavior:'smooth'
+    });
+
+  toast(
+    'Showing your latest reports'
+  );
+
+}
+
+
+function openInquiry(){
+
+  const s =
+    document.getElementById('inquirySection');
+
+  s.style.display='block';
+
+  s.scrollIntoView({
+    behavior:'smooth'
+  });
+
+}
+
+
+function hideInquiry(){
+
+  document
+    .getElementById('inquirySection')
+    .style
+    .display='none';
+
+}
+
+
+function submitInquiry(){
+
+  const msg =
+    document
+      .getElementById('inqMessage')
+      .value
+      .trim();
+
+
+  const email =
+    document
+      .getElementById('inqEmail')
+      .value
+      .trim();
+
+
+  if(!msg){
+
+    toast(
+      'Please enter your question or request'
+    );
+
+    return;
+
+  }
+
+
+  if(
+    email &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  ){
+
+    toast(
+      'Please enter a valid email address'
+    );
+
+    return;
+
+  }
+
+
+  hideInquiry();
+
+
+  const ref =
+    'DWS-' +
+    Math.floor(
+      1000+Math.random()*8999
+    );
+
+
+  toast(
+    'Inquiry submitted • ' +
+    ref
+  );
+
+}
+
+</script>
+
+</body>
+</html>
