@@ -1,93 +1,348 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#087f8c">
-<title>Aqua Link</title>
-<style>
-:root{--teal:#087f8c;--deep:#063b4c;--bg:#f3f8f9;--card:#fff;--muted:#61747c;--green:#16864b;--yellow:#b77900;--blue:#1769aa}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:#17323b}
-.app{max-width:900px;margin:auto;min-height:100vh}.top{background:linear-gradient(135deg,#063b4c,#087f8c);color:white;padding:26px 20px 22px;position:sticky;top:0;z-index:4}.brand{font-size:28px;font-weight:800}.tag{opacity:.86;margin-top:4px}.score{margin-top:18px;display:flex;justify-content:space-between;align-items:center}.score b{font-size:30px}.progress{height:8px;background:#ffffff38;border-radius:10px;overflow:hidden;margin-top:8px}.progress span{display:block;width:78%;height:100%;background:#fff}.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;background:#fff;position:sticky;top:139px;z-index:3;border-bottom:1px solid #dce7e9}.nav button{border:0;background:#eef5f6;padding:10px 5px;border-radius:12px;font-weight:700;color:var(--deep)}.nav button.active{background:var(--teal);color:#fff}.main{padding:18px}.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border:1px solid #dce7e9;border-radius:18px;padding:18px;box-shadow:0 5px 18px #063b4c0b}.big{font-size:26px;font-weight:800}.muted{color:var(--muted)}.hero{background:#dff4f4;border:0}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}.action{padding:20px;border:0;border-radius:18px;background:#fff;text-align:left;box-shadow:0 5px 18px #063b4c10;font-weight:800;font-size:16px}.action span{font-size:28px;display:block;margin-bottom:8px}.section-title{margin:22px 0 10px}.report{margin-top:12px}.status{display:inline-block;padding:5px 9px;border-radius:99px;font-size:12px;font-weight:800}.reported{background:#fff2c7;color:#8b6500}.investigating{background:#dceeff;color:#155b91}.resolved{background:#dff5e8;color:#12643a}.bar{height:10px;background:#e6eef0;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--teal)}label{font-weight:700;font-size:14px;display:block;margin:13px 0 6px}input,select,textarea{width:100%;padding:12px;border:1px solid #cbdadd;border-radius:12px;font:inherit}textarea{min-height:90px}button.primary{margin-top:14px;width:100%;padding:13px;border:0;border-radius:12px;background:var(--teal);color:white;font-weight:800;font-size:15px}.challenge{display:flex;justify-content:space-between;gap:12px;align-items:center}.points{font-weight:800;color:var(--teal);white-space:nowrap}.map{height:330px;background:linear-gradient(135deg,#e1f2e7,#dff3f5);border-radius:18px;position:relative;overflow:hidden;border:1px solid #c7dfe1}.building{position:absolute;background:#fff;border:2px solid #9bbdc2;border-radius:10px;padding:14px;font-weight:800}.pin{position:absolute;width:22px;height:22px;border-radius:50%;background:#e24b4b;border:4px solid #fff;box-shadow:0 2px 10px #0003}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#17323b;color:#fff;padding:12px 18px;border-radius:12px;display:none;z-index:10}.small{font-size:13px}@media(max-width:600px){.grid{grid-template-columns:1fr}.top{padding-bottom:18px}.nav{top:132px}.main{padding:14px}.actions{grid-template-columns:1fr 1fr}}
-</style>
-</head>
-<body>
-<div class="app">
-<header class="top">
-  <div class="brand">💧 Aqua Link</div><div class="tag">See it. Report it. Learn from it. Change it.</div>
-  <div class="score"><div><div class="small">School Water Stewardship Score</div><b id="score">78%</b></div><div>💦 <b id="saved">1,240</b> L<br><span class="small">estimated saved</span></div></div>
-  <div class="progress"><span id="scorebar"></span></div>
-</header>
-<nav class="nav">
-<button class="active" onclick="show('home',this)">🏠 Home</button>
-<button onclick="show('report',this)">📍 Report</button>
-<button onclick="show('challenge',this)">🎯 Challenges</button>
-<button onclick="show('progress',this)">📊 Progress</button>
-</nav>
-<main class="main">
-<section id="home" class="view active">
-  <div class="card hero"><div class="big">Your school is becoming a water-smart school.</div><p class="muted">Every observation becomes useful evidence. Every resolved problem moves the score.</p></div>
-  <div class="actions">
-    <button class="action" onclick="showById('report')"><span>📍</span>Report a problem</button>
-    <button class="action" onclick="showById('challenge')"><span>🎯</span>Take a challenge</button>
-    <button class="action" onclick="showById('progress')"><span>🗺️</span>Open water map</button>
-    <button class="action" onclick="toast('School profile: Riverside High School')"><span>🏫</span>School profile</button>
-  </div>
-  <div class="section-title"><h2>Live reports</h2></div>
-  <div id="reports"></div>
-</section>
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import {
+  DwsDirectory,
+  EscalationQueue,
+  InquiryForm,
+  InquiryList,
+  ReferenceTracker,
+} from "@/components/aqua/dws";
+import {
+  REPORT_TYPES,
+  SEVERITIES,
+  statusTone,
+  useAqua,
+  type Severity,
+} from "@/lib/aqua-store";
 
-<section id="report" class="view">
-  <div class="card"><h2>📍 Report a water problem</h2><p class="muted">Document the problem. Do not attempt repairs yourself.</p>
-    <label>What did you find?</label><select id="type"><option>Leaking tap</option><option>Leaking toilet</option><option>Broken pipe</option><option>Overflow</option><option>Unnecessary water use</option><option>Other</option></select>
-    <label>Location</label><input id="location" placeholder="e.g. Science Block → Basin 3">
-    <label>Severity</label><select id="severity"><option>Low</option><option>Moderate</option><option>Urgent</option></select>
-    <label>Notes</label><textarea id="notes" placeholder="What did you observe?"></textarea>
-    <button class="primary" onclick="submitReport()">Submit report</button>
-  </div>
-</section>
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Aqua Link — School Water Reporting & DWS Inquiries" },
+      {
+        name: "description",
+        content:
+          "Log school water problems, escalate cases to the Department of Water and Sanitation, submit formal inquiries and track every reference in one place.",
+      },
+      { property: "og:title", content: "Aqua Link — School Water Reporting & DWS Inquiries" },
+      {
+        property: "og:description",
+        content:
+          "See it. Report it. Escalate it. Aqua Link connects school water observations to the Department of Water and Sanitation.",
+      },
+    ],
+  }),
+  component: Index,
+});
 
-<section id="challenge" class="view">
-  <div class="card hero"><h2>🎯 Water Missions</h2><p>Short practical challenges. Learn by doing.</p></div>
-  <div class="card challenge report"><div><b>💧 Water Detective</b><div class="muted small">Find three possible sources of water wastage.</div></div><span class="points">+50 XP</span></div>
-  <div class="card challenge report"><div><b>🧮 Leak Logic</b><div class="muted small">Estimate how much water a dripping tap could lose in 24 hours.</div></div><span class="points">+75 XP</span></div>
-  <div class="card challenge report"><div><b>🗺️ Map the Water</b><div class="muted small">Locate every water point in your school.</div></div><span class="points">+100 XP</span></div>
-  <div class="card challenge report"><div><b>🔬 Water Quality Watch</b><div class="muted small">Record a safe visual observation of a nearby water source.</div></div><span class="points">+100 XP</span></div>
-  <button class="primary" onclick="toast('Mission completed! +50 XP')">Complete Water Detective</button>
-</section>
+type Tab = "home" | "report" | "dws" | "challenge" | "progress";
 
-<section id="progress" class="view">
-  <div class="grid">
-    <div class="card"><div class="muted">Reports</div><div class="big" id="reportCount">17</div></div>
-    <div class="card"><div class="muted">Resolved</div><div class="big" id="resolvedCount">13</div></div>
-    <div class="card"><div class="muted">XP earned</div><div class="big">1,420</div></div>
-    <div class="card"><div class="muted">Active days</div><div class="big">7</div></div>
-  </div>
-  <h2 class="section-title">🗺️ School Water Map</h2>
-  <div class="map">
-    <div class="building" style="left:8%;top:12%">Main Block</div>
-    <div class="building" style="right:8%;top:18%">Science</div>
-    <div class="building" style="left:18%;bottom:12%">Sports</div>
-    <div class="building" style="right:16%;bottom:14%">Admin</div>
-    <div class="pin" style="left:38%;top:30%"></div><div class="pin" style="left:70%;top:43%"></div><div class="pin" style="left:48%;bottom:25%"></div>
-  </div>
-  <p class="muted small">Red points represent reported issues in this prototype.</p>
-  <div class="card"><h3>📈 Behaviour trend</h3><p class="muted">Baseline → Week 1 → Week 2 → Week 3</p><div class="bar"><i style="width:76%"></i></div><p><b>76%</b> of the current target achieved</p></div>
-</section>
-</main>
-<div class="toast" id="toast"></div>
-</div>
-<script>
-let reports=[
- {type:'Leaking tap',location:'Science Block → Basin 3',status:'Reported',cls:'reported'},
- {type:'Overflow',location:'Sports field tank',status:'Under investigation',cls:'investigating'},
- {type:'Unnecessary water use',location:'Main Block → Kitchen',status:'Resolved',cls:'resolved'}
+const TABS: { id: Tab; label: string }[] = [
+  { id: "home", label: "🏠 Home" },
+  { id: "report", label: "📍 Report" },
+  { id: "dws", label: "🏛️ DWS" },
+  { id: "challenge", label: "🎯 Missions" },
+  { id: "progress", label: "📊 Progress" },
 ];
-function show(id,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');render();}
-function showById(id){show(id);document.querySelectorAll('.nav button').forEach((b,i)=>{if(['home','report','challenge','progress'][i]===id)b.classList.add('active')});}
-function render(){document.getElementById('reports').innerHTML=reports.map(r=>`<div class="card report"><div style="display:flex;justify-content:space-between;gap:8px"><b>${r.type}</b><span class="status ${r.cls}">${r.status}</span></div><div class="muted small">📍 ${r.location}</div></div>`).join('');document.getElementById('reportCount').textContent=17+Math.max(0,reports.length-3);document.getElementById('resolvedCount').textContent=13+reports.filter(r=>r.status==='Resolved').length-1;}
-function submitReport(){let type=document.getElementById('type').value,location=document.getElementById('location').value||'School location not specified',severity=document.getElementById('severity').value;reports.unshift({type,location:`${location} · ${severity}`,status:'Reported',cls:'reported'});document.getElementById('location').value='';document.getElementById('notes').value='';toast('Report submitted • 🟡 Reported');showById('home');}
-function toast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2200)}
-render();
-</script>
-</body></html>
+
+function Index() {
+  const [tab, setTab] = useState<Tab>("home");
+  const { state, addReport, escalate, advanceStatus, addInquiry } = useAqua();
+  const { reports, inquiries } = state;
+
+  const resolved = reports.filter((r) => r.status === "Resolved").length;
+  const escalated = reports.filter((r) => r.escalated).length;
+  const score = Math.min(98, 60 + resolved * 6 + escalated * 3);
+
+  return (
+    <div className="mx-auto min-h-screen max-w-4xl bg-background">
+      <Toaster position="bottom-center" />
+      <header className="sticky top-0 z-20 bg-brand px-5 pt-6 pb-5 text-primary-foreground">
+        <h1 className="text-3xl font-extrabold">💧 Aqua Link</h1>
+        <p className="mt-1 opacity-85">See it. Report it. Escalate it. Change it.</p>
+        <div className="mt-4 flex items-end justify-between">
+          <div>
+            <div className="text-xs opacity-85">School Water Stewardship Score</div>
+            <b className="text-3xl">{score}%</b>
+          </div>
+          <div className="text-right text-sm">
+            💦 <b>1,240</b> L
+            <div className="text-xs opacity-85">estimated saved</div>
+          </div>
+        </div>
+        <div className="mt-2 h-2 overflow-hidden rounded-full bg-primary-foreground/25">
+          <span className="block h-full bg-primary-foreground" style={{ width: `${score}%` }} />
+        </div>
+      </header>
+
+      <nav className="sticky top-[168px] z-10 grid grid-cols-5 gap-2 border-b border-border bg-card p-3">
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`rounded-xl px-1 py-2.5 text-xs font-extrabold transition-colors ${
+              tab === t.id ? "bg-primary text-primary-foreground" : "bg-secondary text-deep"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </nav>
+
+      <main className="space-y-3 p-4">
+        {tab === "home" && (
+          <>
+            <div className="aqua-card bg-hero">
+              <div className="text-2xl font-extrabold text-deep">
+                Your school is becoming a water-smart school.
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Every observation becomes evidence. Unresolved problems can be escalated to the
+                Department of Water and Sanitation.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { icon: "📍", label: "Report a problem", to: "report" as Tab },
+                { icon: "🏛️", label: "Contact DWS", to: "dws" as Tab },
+                { icon: "🎯", label: "Take a mission", to: "challenge" as Tab },
+                { icon: "🗺️", label: "Open water map", to: "progress" as Tab },
+              ].map((a) => (
+                <button
+                  key={a.label}
+                  onClick={() => setTab(a.to)}
+                  className="aqua-card text-left text-base font-extrabold text-deep"
+                >
+                  <span className="mb-2 block text-2xl">{a.icon}</span>
+                  {a.label}
+                </button>
+              ))}
+            </div>
+
+            <h2 className="pt-2 text-lg font-extrabold text-deep">Live reports</h2>
+            {reports.map((r) => (
+              <div key={r.id} className="aqua-card">
+                <div className="flex items-start justify-between gap-3">
+                  <b className="text-deep">{r.type}</b>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-extrabold ${statusTone[r.status]}`}
+                  >
+                    {r.status}
+                  </span>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  📍 {r.location} · {r.severity}
+                </div>
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <span className="rounded-md bg-secondary px-2 py-1 font-mono text-xs font-bold text-deep">
+                    {r.ref}
+                  </span>
+                  {r.escalated && (
+                    <span className="rounded-full bg-info-soft px-2 py-1 text-xs font-extrabold text-info">
+                      🏛️ With DWS {r.dwsRef}
+                    </span>
+                  )}
+                  {r.status !== "Resolved" && (
+                    <button
+                      onClick={() => advanceStatus(r.id)}
+                      className="ml-auto rounded-lg border border-border px-3 py-1.5 text-xs font-extrabold text-deep"
+                    >
+                      Advance status
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+
+        {tab === "report" && <ReportForm onSubmit={addReport} onDone={() => setTab("home")} />}
+
+        {tab === "dws" && (
+          <>
+            <EscalationQueue reports={reports} onEscalate={escalate} />
+            <InquiryForm onSubmit={addInquiry} />
+            <ReferenceTracker reports={reports} inquiries={inquiries} />
+            <InquiryList inquiries={inquiries} />
+            <DwsDirectory />
+          </>
+        )}
+
+        {tab === "challenge" && (
+          <>
+            <div className="aqua-card bg-hero">
+              <h2 className="text-xl font-extrabold text-deep">🎯 Water Missions</h2>
+              <p className="text-sm text-muted-foreground">
+                Short practical challenges. Learn by doing.
+              </p>
+            </div>
+            {[
+              ["💧 Water Detective", "Find three possible sources of water wastage.", "+50 XP"],
+              ["🧮 Leak Logic", "Estimate how much water a dripping tap loses in 24 hours.", "+75 XP"],
+              ["🗺️ Map the Water", "Locate every water point in your school.", "+100 XP"],
+              ["🔬 Water Quality Watch", "Record a safe visual observation of a water source.", "+100 XP"],
+              ["🏛️ Civic Voice", "Draft and submit one inquiry to DWS.", "+150 XP"],
+            ].map(([title, desc, xp]) => (
+              <div key={title} className="aqua-card flex items-center justify-between gap-3">
+                <div>
+                  <b className="text-deep">{title}</b>
+                  <div className="text-sm text-muted-foreground">{desc}</div>
+                </div>
+                <button
+                  onClick={() => toast.success(`Mission completed! ${xp}`)}
+                  className="shrink-0 rounded-lg bg-secondary px-3 py-2 text-sm font-extrabold text-primary"
+                >
+                  {xp}
+                </button>
+              </div>
+            ))}
+          </>
+        )}
+
+        {tab === "progress" && (
+          <>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                ["Reports", reports.length],
+                ["Resolved", resolved],
+                ["With DWS", escalated],
+                ["Inquiries", inquiries.length],
+              ].map(([label, value]) => (
+                <div key={String(label)} className="aqua-card">
+                  <div className="text-sm text-muted-foreground">{label}</div>
+                  <div className="text-2xl font-extrabold text-deep">{value}</div>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="pt-2 text-lg font-extrabold text-deep">🗺️ School Water Map</h2>
+            <div className="relative h-80 overflow-hidden rounded-2xl border border-border bg-hero">
+              {[
+                ["Main Block", "left-[8%] top-[12%]"],
+                ["Science", "right-[8%] top-[18%]"],
+                ["Sports", "left-[18%] bottom-[12%]"],
+                ["Admin", "right-[16%] bottom-[14%]"],
+              ].map(([name, pos]) => (
+                <div
+                  key={name}
+                  className={`absolute rounded-lg border-2 border-border bg-card px-3 py-2 text-sm font-extrabold text-deep ${pos}`}
+                >
+                  {name}
+                </div>
+              ))}
+              {["left-[38%] top-[30%]", "left-[70%] top-[43%]", "left-[48%] bottom-[25%]"].map(
+                (pos) => (
+                  <span
+                    key={pos}
+                    className={`absolute size-5 rounded-full border-4 border-card bg-destructive shadow-float ${pos}`}
+                  />
+                ),
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Red points represent reported issues in this prototype.
+            </p>
+
+            <div className="aqua-card">
+              <h3 className="font-extrabold text-deep">📈 Behaviour trend</h3>
+              <p className="text-sm text-muted-foreground">Baseline → Week 1 → Week 2 → Week 3</p>
+              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-secondary">
+                <i className="block h-full bg-primary" style={{ width: "76%" }} />
+              </div>
+              <p className="mt-2 text-sm">
+                <b>76%</b> of the current target achieved
+              </p>
+            </div>
+          </>
+        )}
+      </main>
+    </div>
+  );
+}
+
+function ReportForm({
+  onSubmit,
+  onDone,
+}: {
+  onSubmit: (r: {
+    type: string;
+    location: string;
+    severity: Severity;
+    notes: string;
+  }) => { ref: string };
+  onDone: () => void;
+}) {
+  const [type, setType] = useState(REPORT_TYPES[0]!);
+  const [location, setLocation] = useState("");
+  const [severity, setSeverity] = useState<Severity>("Low");
+  const [notes, setNotes] = useState("");
+
+  return (
+    <div className="aqua-card">
+      <h2 className="text-xl font-extrabold text-deep">📍 Report a water problem</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Document the problem. Do not attempt repairs yourself.
+      </p>
+
+      <label className="mt-4 block text-sm font-bold">What did you find?</label>
+      <select className="aqua-field mt-1.5" value={type} onChange={(e) => setType(e.target.value)}>
+        {REPORT_TYPES.map((t) => (
+          <option key={t}>{t}</option>
+        ))}
+      </select>
+
+      <label className="mt-3 block text-sm font-bold">Location</label>
+      <input
+        className="aqua-field mt-1.5"
+        maxLength={120}
+        placeholder="e.g. Science Block → Basin 3"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+      />
+
+      <label className="mt-3 block text-sm font-bold">Severity</label>
+      <select
+        className="aqua-field mt-1.5"
+        value={severity}
+        onChange={(e) => setSeverity(e.target.value as Severity)}
+      >
+        {SEVERITIES.map((s) => (
+          <option key={s}>{s}</option>
+        ))}
+      </select>
+
+      <label className="mt-3 block text-sm font-bold">Notes</label>
+      <textarea
+        className="aqua-field mt-1.5 min-h-24"
+        maxLength={1000}
+        placeholder="What did you observe?"
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+      />
+
+      <button
+        type="button"
+        onClick={() => {
+          const created = onSubmit({
+            type,
+            location: location.trim() || "School location not specified",
+            severity,
+            notes: notes.trim(),
+          });
+          setLocation("");
+          setNotes("");
+          toast.success(`Report logged · ${created.ref}`);
+          onDone();
+        }}
+        className="mt-4 w-full rounded-xl bg-primary px-4 py-3 font-extrabold text-primary-foreground transition-opacity hover:opacity-90"
+      >
+        Submit report
+      </button>
+      <p className="mt-2 text-xs text-muted-foreground">
+        Urgent or off-site problems can be escalated to DWS from the 🏛️ DWS tab.
+      </p>
+    </div>
+  );
+}
