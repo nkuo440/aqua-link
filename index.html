@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#087f8c">
+<title>Aqua Link</title>
+<style>
+:root{--teal:#087f8c;--deep:#063b4c;--bg:#f3f8f9;--card:#fff;--muted:#61747c;--green:#16864b;--yellow:#b77900;--blue:#1769aa}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:#17323b}
+.app{max-width:900px;margin:auto;min-height:100vh}.top{background:linear-gradient(135deg,#063b4c,#087f8c);color:white;padding:26px 20px 22px;position:sticky;top:0;z-index:4}.brand{font-size:28px;font-weight:800}.tag{opacity:.86;margin-top:4px}.score{margin-top:18px;display:flex;justify-content:space-between;align-items:center}.score b{font-size:30px}.progress{height:8px;background:#ffffff38;border-radius:10px;overflow:hidden;margin-top:8px}.progress span{display:block;width:78%;height:100%;background:#fff}.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;background:#fff;position:sticky;top:139px;z-index:3;border-bottom:1px solid #dce7e9}.nav button{border:0;background:#eef5f6;padding:10px 5px;border-radius:12px;font-weight:700;color:var(--deep)}.nav button.active{background:var(--teal);color:#fff}.main{padding:18px}.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card{background:var(--card);border:1px solid #dce7e9;border-radius:18px;padding:18px;box-shadow:0 5px 18px #063b4c0b}.big{font-size:26px;font-weight:800}.muted{color:var(--muted)}.hero{background:#dff4f4;border:0}.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0}.action{padding:20px;border:0;border-radius:18px;background:#fff;text-align:left;box-shadow:0 5px 18px #063b4c10;font-weight:800;font-size:16px}.action span{font-size:28px;display:block;margin-bottom:8px}.section-title{margin:22px 0 10px}.report{margin-top:12px}.status{display:inline-block;padding:5px 9px;border-radius:99px;font-size:12px;font-weight:800}.reported{background:#fff2c7;color:#8b6500}.investigating{background:#dceeff;color:#155b91}.resolved{background:#dff5e8;color:#12643a}.bar{height:10px;background:#e6eef0;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--teal)}label{font-weight:700;font-size:14px;display:block;margin:13px 0 6px}input,select,textarea{width:100%;padding:12px;border:1px solid #cbdadd;border-radius:12px;font:inherit}textarea{min-height:90px}button.primary{margin-top:14px;width:100%;padding:13px;border:0;border-radius:12px;background:var(--teal);color:white;font-weight:800;font-size:15px}.challenge{display:flex;justify-content:space-between;gap:12px;align-items:center}.points{font-weight:800;color:var(--teal);white-space:nowrap}.map{height:330px;background:linear-gradient(135deg,#e1f2e7,#dff3f5);border-radius:18px;position:relative;overflow:hidden;border:1px solid #c7dfe1}.building{position:absolute;background:#fff;border:2px solid #9bbdc2;border-radius:10px;padding:14px;font-weight:800}.pin{position:absolute;width:22px;height:22px;border-radius:50%;background:#e24b4b;border:4px solid #fff;box-shadow:0 2px 10px #0003}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#17323b;color:#fff;padding:12px 18px;border-radius:12px;display:none;z-index:10}.small{font-size:13px}@media(max-width:600px){.grid{grid-template-columns:1fr}.top{padding-bottom:18px}.nav{top:132px}.main{padding:14px}.actions{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand">💧 Aqua Link</div><div class="tag">See it. Report it. Learn from it. Change it.</div>
+  <div class="score"><div><div class="small">School Water Stewardship Score</div><b id="score">78%</b></div><div>💦 <b id="saved">1,240</b> L<br><span class="small">estimated saved</span></div></div>
+  <div class="progress"><span id="scorebar"></span></div>
+</header>
+<nav class="nav">
+<button class="active" onclick="show('home',this)">🏠 Home</button>
+<button onclick="show('report',this)">📍 Report</button>
+<button onclick="show('challenge',this)">🎯 Challenges</button>
+<button onclick="show('progress',this)">📊 Progress</button>
+</nav>
+<main class="main">
+<section id="home" class="view active">
+  <div class="card hero"><div class="big">Your school is becoming a water-smart school.</div><p class="muted">Every observation becomes useful evidence. Every resolved problem moves the score.</p></div>
+  <div class="actions">
+    <button class="action" onclick="showById('report')"><span>📍</span>Report a problem</button>
+    <button class="action" onclick="showById('challenge')"><span>🎯</span>Take a challenge</button>
+    <button class="action" onclick="showById('progress')"><span>🗺️</span>Open water map</button>
+    <button class="action" onclick="toast('School profile: Riverside High School')"><span>🏫</span>School profile</button>
+  </div>
+  <div class="section-title"><h2>Live reports</h2></div>
+  <div id="reports"></div>
+</section>
+
+<section id="report" class="view">
+  <div class="card"><h2>📍 Report a water problem</h2><p class="muted">Document the problem. Do not attempt repairs yourself.</p>
+    <label>What did you find?</label><select id="type"><option>Leaking tap</option><option>Leaking toilet</option><option>Broken pipe</option><option>Overflow</option><option>Unnecessary water use</option><option>Other</option></select>
+    <label>Location</label><input id="location" placeholder="e.g. Science Block → Basin 3">
+    <label>Severity</label><select id="severity"><option>Low</option><option>Moderate</option><option>Urgent</option></select>
+    <label>Notes</label><textarea id="notes" placeholder="What did you observe?"></textarea>
+    <button class="primary" onclick="submitReport()">Submit report</button>
+  </div>
+</section>
+
+<section id="challenge" class="view">
+  <div class="card hero"><h2>🎯 Water Missions</h2><p>Short practical challenges. Learn by doing.</p></div>
+  <div class="card challenge report"><div><b>💧 Water Detective</b><div class="muted small">Find three possible sources of water wastage.</div></div><span class="points">+50 XP</span></div>
+  <div class="card challenge report"><div><b>🧮 Leak Logic</b><div class="muted small">Estimate how much water a dripping tap could lose in 24 hours.</div></div><span class="points">+75 XP</span></div>
+  <div class="card challenge report"><div><b>🗺️ Map the Water</b><div class="muted small">Locate every water point in your school.</div></div><span class="points">+100 XP</span></div>
+  <div class="card challenge report"><div><b>🔬 Water Quality Watch</b><div class="muted small">Record a safe visual observation of a nearby water source.</div></div><span class="points">+100 XP</span></div>
+  <button class="primary" onclick="toast('Mission completed! +50 XP')">Complete Water Detective</button>
+</section>
+
+<section id="progress" class="view">
+  <div class="grid">
+    <div class="card"><div class="muted">Reports</div><div class="big" id="reportCount">17</div></div>
+    <div class="card"><div class="muted">Resolved</div><div class="big" id="resolvedCount">13</div></div>
+    <div class="card"><div class="muted">XP earned</div><div class="big">1,420</div></div>
+    <div class="card"><div class="muted">Active days</div><div class="big">7</div></div>
+  </div>
+  <h2 class="section-title">🗺️ School Water Map</h2>
+  <div class="map">
+    <div class="building" style="left:8%;top:12%">Main Block</div>
+    <div class="building" style="right:8%;top:18%">Science</div>
+    <div class="building" style="left:18%;bottom:12%">Sports</div>
+    <div class="building" style="right:16%;bottom:14%">Admin</div>
+    <div class="pin" style="left:38%;top:30%"></div><div class="pin" style="left:70%;top:43%"></div><div class="pin" style="left:48%;bottom:25%"></div>
+  </div>
+  <p class="muted small">Red points represent reported issues in this prototype.</p>
+  <div class="card"><h3>📈 Behaviour trend</h3><p class="muted">Baseline → Week 1 → Week 2 → Week 3</p><div class="bar"><i style="width:76%"></i></div><p><b>76%</b> of the current target achieved</p></div>
+</section>
+</main>
+<div class="toast" id="toast"></div>
+</div>
+<script>
+let reports=[
+ {type:'Leaking tap',location:'Science Block → Basin 3',status:'Reported',cls:'reported'},
+ {type:'Overflow',location:'Sports field tank',status:'Under investigation',cls:'investigating'},
+ {type:'Unnecessary water use',location:'Main Block → Kitchen',status:'Resolved',cls:'resolved'}
+];
+function show(id,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');render();}
+function showById(id){show(id);document.querySelectorAll('.nav button').forEach((b,i)=>{if(['home','report','challenge','progress'][i]===id)b.classList.add('active')});}
+function render(){document.getElementById('reports').innerHTML=reports.map(r=>`<div class="card report"><div style="display:flex;justify-content:space-between;gap:8px"><b>${r.type}</b><span class="status ${r.cls}">${r.status}</span></div><div class="muted small">📍 ${r.location}</div></div>`).join('');document.getElementById('reportCount').textContent=17+Math.max(0,reports.length-3);document.getElementById('resolvedCount').textContent=13+reports.filter(r=>r.status==='Resolved').length-1;}
+function submitReport(){let type=document.getElementById('type').value,location=document.getElementById('location').value||'School location not specified',severity=document.getElementById('severity').value;reports.unshift({type,location:`${location} · ${severity}`,status:'Reported',cls:'reported'});document.getElementById('location').value='';document.getElementById('notes').value='';toast('Report submitted • 🟡 Reported');showById('home');}
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2200)}
+render();
+</script>
+</body></html>
