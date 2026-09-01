@@ -1,10 +1,96 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aqua Link | Riverside High</title><link rel="stylesheet" href="styles.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"></head><body>
-<header class="header"><a class="brand" href="index.html"><span class="brandmark">〰</span><span>AQUA<span>LINK</span><small>RIVERSIDE HIGH • WATER NETWORK</small></span></a><nav><a class="active" href="index.html">Home</a><a href="map.html">Water Map</a><a href="report.html">Report</a><a href="challenges.html">Academy</a><a href="reports.html">Impact</a></nav><a class="user-pill" href="profile.html"><span id="navInitial">A</span><b id="navName">Aqua Learner</b>↗</a></header>
-<main>
-<section class="hero2"><div class="hero2-copy"><div class="eyebrow">RIVERSIDE HIGH SCHOOL · VEREENIGING</div><h1>Water has a<br><span>network.</span><br>Now you do too.</h1><p>Aqua Link connects learners, the school and the community to spot water problems, build practical skills and turn observations into action.</p><div class="actions"><a class="btn primary" href="report.html">＋ Report a water issue</a><a class="btn ghost" href="map.html">Explore the water map →</a></div><div class="hero-stat"><b>47</b><span>WATER WATCHERS<br>ON THE NETWORK</span><b>02</b><span>OPEN ISSUES<br>RIGHT NOW</span></div></div><div class="hero2-visual"><img src="https://images.unsplash.com/photo-1538300342682-cf57afb97285?auto=format&fit=crop&w=1300&q=85"><div class="hero-sticker"><b>WATER<br>IS DATA.</b><span>+</span></div><div class="hero-caption">01 / SEE IT<br><strong>CONNECT IT.</strong></div></div></section>
-<section class="marquee"><span>SEE IT</span>✦<span>PIN IT</span>✦<span>LEARN IT</span>✦<span>ACT ON IT</span>✦<span>SEE IT</span>✦<span>PIN IT</span>✦</section>
-<section class="intro"><div><div class="eyebrow">THE AQUA LINK SYSTEM</div><h2>Not an awareness campaign.<br><i>A working water network.</i></h2></div><p>Every report creates a data point. Every challenge builds a skill. Every resolved issue becomes proof that young people can participate in water stewardship.</p></section>
-<section class="tiles"><a class="tile map-tile" href="map.html"><div class="tile-top"><span>01 / LIVE GRID</span><b>↗</b></div><h3>Map the<br>water system.</h3><p>See reports, water points and school locations on one living map.</p><div class="tile-number">01</div></a><a class="tile academy-tile" href="challenges.html"><div class="tile-top"><span>02 / AQUA ACADEMY</span><b>↗</b></div><h3>Level up<br>your water IQ.</h3><p>Complete field missions, earn XP and unlock practical water skills.</p><div class="xp-chip">LEVEL 03 · 170 XP</div></a><a class="tile photo-tile" href="report.html"><img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=900&q=85"><div class="photo-overlay"><span>03 / ACTION</span><h3>One photo.<br>One report.<br>One starting point.</h3><b>Report now →</b></div></a></section>
-<section class="people"><div class="people-copy"><div class="eyebrow">SCHOOL + COMMUNITY</div><h2>The water team<br>is bigger than<br>the classroom.</h2><p>Learners notice. Teachers guide. Community members contribute local knowledge. Water engineers help turn patterns into practical action.</p><a class="underline" href="profile.html">Meet your network →</a></div><div class="people-img"><img src="https://images.unsplash.com/photo-1509099836639-18ba02c6d0c7?auto=format&fit=crop&w=1100&q=85"></div></section>
-<section class="closing"><div class="eyebrow">THE NEXT DROP IS YOURS</div><h2>What will you<br><span>connect?</span></h2><a class="btn light" href="report.html">Start with a report ↗</a></section></main>
-<footer><div class="brand mini"><span class="brandmark">〰</span><span>AQUALINK<small>RIVERSIDE HIGH</small></span></div><span>1 Hawthorne St · Three Rivers · Vereeniging</span><span>Prototype · 2026</span></footer><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071923">
+<title>Aqua Link — Riverside Water Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar">
+  <a class="logo" href="#home" aria-label="Aqua Link home"><span class="logo-mark">≈</span><span>AQUA<span class="accent">LINK</span><small>RIVERSIDE WATER NETWORK</small></span></a>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    <a class="active" href="#home">Overview</a><a href="#map">Live Map</a><a href="#report">Report</a><a href="#academy">Academy</a><a href="#community">Community</a>
+  </nav>
+  <div class="top-actions"><button class="icon-btn" id="notifyBtn" aria-label="Notifications">◔<i></i></button><button class="profile-mini" id="profileOpen"><span id="navAvatar">O</span><b id="navName">Onthatile</b><span>⌄</span></button></div>
+</header>
+
+<main id="app">
+<section id="home" class="view active-view">
+  <div class="dashboard-head">
+    <div><div class="kicker">TUESDAY · 01 SEPT 2026 · RIVERSIDE HIGH</div><h1>Good morning,<br><span id="heroName">Onthatile.</span></h1><p class="subhead">The network is moving. Here’s what needs your attention.</p></div>
+    <div class="network-badge"><span class="pulse"></span><div><b>NETWORK LIVE</b><small>School + community</small></div></div>
+  </div>
+
+  <div class="metrics">
+    <article class="metric metric-main"><div class="metric-label">WATER NETWORK HEALTH <span>LIVE</span></div><div class="health"><strong>92</strong><span>/100</span><div class="ring"><b>GOOD</b></div></div><div class="meter"><i style="width:92%"></i></div><small>Based on current reports and resolution activity.</small></article>
+    <article class="metric"><div class="metric-label">ACTIVE ISSUES</div><strong class="metric-number" id="activeMetric">2</strong><p>Across monitored zones</p><a href="#map">View map →</a></article>
+    <article class="metric lime"><div class="metric-label">YOUR XP</div><strong class="metric-number" id="xpMetric">170</strong><p>Level <b id="levelMetric">03</b> · Water Watcher</p><a href="#academy">Continue mission →</a></article>
+    <article class="metric coral"><div class="metric-label">RESOLVED</div><strong class="metric-number" id="resolvedMetric">12</strong><p>Issues closed by the network</p><a href="#impact">See impact →</a></article>
+  </div>
+
+  <div class="grid-two">
+    <section class="panel activity-panel"><div class="panel-head"><div><span class="section-tag">LIVE ACTIVITY</span><h2>What’s happening</h2></div><button class="text-btn" data-filter="all">View all</button></div><div id="activityFeed"></div></section>
+    <section class="panel mission-panel"><div class="mission-top"><span class="section-tag">TODAY'S MISSION</span><span class="xp-pill">+50 XP</span></div><div class="mission-icon">⌁</div><h2>Leak Detective</h2><p>Find one water point around school that needs attention. Record what you see, where it is, and why it matters.</p><button class="cta" data-go="#report">Start mission <span>→</span></button><div class="mission-progress"><span>2 / 3 steps</span><i><b></b></i></div></section>
+  </div>
+
+  <section class="section-block">
+    <div class="section-title"><div><span class="section-tag">YOUR NETWORK</span><h2>Five ways to move water data.</h2></div><p>Aqua Link turns everyday observations into a shared picture of the school and community water system.</p></div>
+    <div class="feature-grid">
+      <button class="feature blue" data-go="#map"><span>01</span><b>MAP</b><h3>See the network.</h3><small>Issues, zones and water points in one live view.</small><em>↗</em></button>
+      <button class="feature dark" data-go="#report"><span>02</span><b>REPORT</b><h3>Make a problem visible.</h3><small>A clear report gives the next person something to act on.</small><em>↗</em></button>
+      <button class="feature lime" data-go="#academy"><span>03</span><b>LEARN</b><h3>Build field skills.</h3><small>Earn XP through practical water missions.</small><em>↗</em></button>
+      <button class="feature coral" data-go="#community"><span>04</span><b>CONNECT</b><h3>Grow the water team.</h3><small>School knowledge meets community knowledge.</small><em>↗</em></button>
+      <button class="feature image-card" data-go="#impact"><img src="https://images.unsplash.com/photo-1538300342682-cf57afb97285?auto=format&fit=crop&w=700&q=75" alt="Water flowing through a landscape"><span>05</span><div><b>IMPACT</b><h3>Show what changed.</h3></div></button>
+    </div>
+  </section>
+</section>
+
+<section id="map" class="view">
+  <div class="view-head"><div><span class="kicker">LIVE WATER GRID</span><h1>Put the network<br><span>on the map.</span></h1><p>Riverside High · 1 Hawthorne St, Three Rivers, Vereeniging</p></div><button class="cta" data-go="#report">＋ Report issue</button></div>
+  <div class="map-layout"><div class="map-box"><div id="mapCanvas"></div><div class="map-controls"><button class="active" data-map-filter="all">All</button><button data-map-filter="open">Open</button><button data-map-filter="resolved">Resolved</button></div></div>
+  <aside class="map-sidebar"><div class="side-head"><span class="section-tag">NETWORK STATUS</span><strong>6 monitored zones</strong></div><div id="zoneList"></div><div class="legend"><span><i class="dot open"></i> Open</span><span><i class="dot investigating"></i> Investigating</span><span><i class="dot resolved"></i> Resolved</span></div></aside></div>
+</section>
+
+<section id="report" class="view">
+  <div class="view-head compact"><div><span class="kicker">FIELD ACTION / NEW REPORT</span><h1>Make it<br><span>visible.</span></h1><p>Four steps. Useful evidence. A report the water team can understand.</p></div><div class="report-code">AQUA LINK<br><b id="newCode">AL-014</b></div></div>
+  <div class="report-layout"><div class="steps"><div class="step active"><b>01</b><div><span>WHAT</span><h3>What did you find?</h3><div class="choice-grid" id="issueChoices"><button data-value="Leaking tap">Leaking tap</button><button data-value="Running toilet">Running toilet</button><button data-value="Broken pipe">Broken pipe</button><button data-value="Water quality">Water quality</button><button data-value="Overflow">Overflow</button><button data-value="Other">Other</button></div></div></div>
+  <div class="step"><b>02</b><div><span>WHERE</span><h3>Where is it?</h3><select id="reportLocation"><option>Block D</option><option>Block E</option><option>Block F</option><option>Block G</option><option>Block H</option><option>Block I</option><option>HALL</option><option>SPORTS FIELD</option><option>Community / nearby</option></select></div></div>
+  <div class="step"><b>03</b><div><span>EVIDENCE</span><h3>What did you see?</h3><textarea id="reportNote" placeholder="Describe what happened, when you noticed it, and anything useful for the water team."></textarea></div></div>
+  <div class="step"><b>04</b><div><span>SUBMIT</span><h3>Send it into the network.</h3><p class="privacy-note">This demonstration stores reports only in this browser. It does not collect or send personal data to a server.</p><button class="cta wide" id="submitReport">Submit report <span>→</span></button></div></div></div>
+  <aside class="report-preview"><span class="section-tag">REPORT PREVIEW</span><div class="preview-id">AL-014</div><div class="preview-row"><small>ISSUE</small><b id="previewIssue">Choose an issue</b></div><div class="preview-row"><small>LOCATION</small><b id="previewLocation">Block D</b></div><div class="preview-row"><small>STATUS</small><b class="status">● READY</b></div><div class="mini-flow"><span>REPORTED</span><i></i><span>INVESTIGATING</span><i></i><span>RESOLVED</span></div></aside></div>
+</section>
+
+<section id="academy" class="view">
+  <div class="academy-hero"><div><span class="kicker">AQUA ACADEMY / FIELD MODE</span><h1>Learn water.<br><span>Out in the world.</span></h1><p>Short missions turn observation into practical water intelligence.</p></div><div class="level-box"><small>YOUR LEVEL</small><strong id="academyLevel">03</strong><div><b id="academyXP">170</b> XP</div><div class="xpbar"><i id="academyBar"></i></div><small>30 XP to Level 04</small></div></div>
+  <div class="academy-tabs"><button class="active">ALL MISSIONS</button><button>FIELD</button><button>SCIENCE</button><button>COMMUNITY</button></div><div class="mission-list" id="missionList"></div>
+</section>
+
+<section id="community" class="view">
+  <div class="view-head"><div><span class="kicker">SCHOOL + COMMUNITY</span><h1>The water team<br><span>is bigger.</span></h1><p>Local observation becomes stronger when people can see the same picture.</p></div><div class="community-stat"><strong>47</strong><span>WATER<br>WATCHERS</span></div></div>
+  <div class="community-grid"><article class="community-main"><div class="community-photo"><img src="https://images.unsplash.com/photo-1509099836639-18ba02c6d0c7?auto=format&fit=crop&w=900&q=75" alt="Young people working together"></div><div class="community-copy"><span class="section-tag">SEVEN-DAY WATER SHIFT</span><h2>Seven days.<br>One shared experiment.</h2><p>During Water Monitoring Day, the school and community can log observations, complete challenges and reveal what changed over seven days.</p><button class="cta" id="joinChallenge">Join the 7-day shift <span>→</span></button></div></article>
+  <aside class="community-side"><span class="section-tag">WHO CONNECTS</span><div class="person-row"><span class="avatar purple">L</span><div><b>Learners</b><small>Observe · report · learn</small></div></div><div class="person-row"><span class="avatar aqua">T</span><div><b>Teachers</b><small>Guide · verify · support</small></div></div><div class="person-row"><span class="avatar orange">W</span><div><b>Water mentors</b><small>Explain · investigate · build</small></div></div><div class="person-row"><span class="avatar green">C</span><div><b>Community</b><small>Share local knowledge</small></div></div><a class="dws-link" href="#services">Need official water information? <b>Open Water Services →</b></a></aside></div>
+</section>
+
+<section id="impact" class="view">
+  <div class="view-head"><div><span class="kicker">NETWORK IMPACT</span><h1>Don't just say<br><span>“we cared.”</span></h1><p>Show the evidence of what the network noticed and changed.</p></div></div>
+  <div class="impact-board"><div class="impact-number"><small>ISSUES RECORDED</small><strong id="impactReports">14</strong><span>since launch</span></div><div class="impact-number"><small>RESOLVED</small><strong id="impactResolved">12</strong><span>closed by the network</span></div><div class="impact-number"><small>WATER WATCHERS</small><strong>47</strong><span>school + community</span></div><div class="impact-chart"><div class="chart-head"><b>7-DAY ACTIVITY</b><span>REPORTS + MISSIONS</span></div><div class="bars"><i style="height:35%"></i><i style="height:48%"></i><i style="height:40%"></i><i style="height:72%"></i><i style="height:60%"></i><i style="height:86%"></i><i style="height:100%"></i></div><div class="days"><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span></div></div></div>
+  <div class="impact-callout"><span>THE POINT</span><h2>Data becomes useful<br>when someone acts on it.</h2><button class="cta" data-go="#report">Add another data point →</button></div>
+</section>
+
+<section id="services" class="view">
+  <div class="services"><div><span class="kicker">OFFICIAL INFORMATION</span><h1>When you need<br><span>the water experts.</span></h1><p>Aqua Link is the school and community participation layer. For official departmental information, water services guidance and government contacts, use the Department of Water and Sanitation's official channels.</p><a class="cta" href="https://www.dws.gov.za/" target="_blank" rel="noopener">Visit DWS ↗</a></div><div class="service-cards"><article><b>01</b><h2>School issue?</h2><p>Report it through Aqua Link so the school network can track the issue.</p><a href="#report">Make a report →</a></article><article><b>02</b><h2>Official question?</h2><p>Use the Department of Water and Sanitation's official information channels.</p><a href="https://www.dws.gov.za/" target="_blank" rel="noopener">Open DWS →</a></article></div></div>
+</section>
+</main>
+
+<div class="mobile-nav"><a class="active" href="#home">⌂<span>Home</span></a><a href="#map">⌖<span>Map</span></a><a href="#report" class="mobile-report">＋</a><a href="#academy">◇<span>Academy</span></a><button id="mobileProfile">◉<span>Profile</span></button></div>
+
+<div class="modal" id="profileModal" aria-hidden="true"><div class="modal-card"><button class="modal-close" id="profileClose">×</button><span class="section-tag">YOUR PROFILE</span><div class="profile-big"><span id="bigAvatar">O</span><div><h2 id="profileTitle">Onthatile</h2><p id="profileRole">Learner · Riverside High School</p></div></div><label>Display name<input id="profileInput" maxlength="28"></label><button class="cta wide" id="saveProfile">Save profile</button><div class="profile-stats"><span><b id="pReports">2</b>Reports</span><span><b id="pMissions">3</b>Missions</span><span><b>170</b>XP</span></div></div></div>
+<div id="toast" role="status"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script>
+</body></html>
