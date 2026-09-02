@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 </head>
 <body>
 <div class="app-shell">
@@ -17,7 +19,7 @@
   <nav class="desktop-nav" aria-label="Main navigation">
     <a class="active" href="#home">Overview</a><a href="#map">Live Map</a><a href="#report">Report</a><a href="#academy">Academy</a><a href="#community">Community</a>
   </nav>
-  <div class="top-actions"><button class="icon-btn" id="notifyBtn" aria-label="Notifications">◔<i></i></button><button class="profile-mini" id="profileOpen"><span id="navAvatar">O</span><b id="navName">Onthatile</b><span>⌄</span></button></div>
+  <div class="top-actions"><button class="icon-btn" id="notifyBtn" aria-label="Notifications">◔<i></i></button><button class="profile-mini" id="profileOpen"><span id="navAvatar">O</span><b id="navName">Onthatile</b><span>⌄</span></button><button class="auth-btn" id="authOpen">Sign in</button></div>
 </header>
 
 <main id="app">
@@ -90,6 +92,7 @@
 
 <div class="mobile-nav"><a class="active" href="#home">⌂<span>Home</span></a><a href="#map">⌖<span>Map</span></a><a href="#report" class="mobile-report">＋</a><a href="#academy">◇<span>Academy</span></a><button id="mobileProfile">◉<span>Profile</span></button></div>
 
+<div class="modal" id="authModal" aria-hidden="true"><div class="modal-card auth-card"><button class="modal-close" id="authClose">×</button><span class="section-tag">AQUA LINK ACCOUNT</span><h2 id="authTitle">Sign in to your network</h2><p class="auth-copy">Use an email address and password to sync your reports, missions and profile across devices. Keep your account details minimal.</p><label>Email<input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters"></label><button class="cta wide" id="authSubmit">Sign in</button><button class="auth-switch" id="authSwitch">Need an account? Create one</button><p class="auth-status" id="authStatus"></p></div></div>
 <div class="modal" id="profileModal" aria-hidden="true"><div class="modal-card"><button class="modal-close" id="profileClose">×</button><span class="section-tag">YOUR PROFILE</span><div class="profile-big"><span id="bigAvatar">O</span><div><h2 id="profileTitle">Onthatile</h2><p id="profileRole">Learner · Riverside High School</p></div></div><label>Display name<input id="profileInput" maxlength="28"></label><button class="cta wide" id="saveProfile">Save profile</button><div class="profile-stats"><span><b id="pReports">2</b>Reports</span><span><b id="pMissions">3</b>Missions</span><span><b>170</b>XP</span></div></div></div>
 <div id="toast" role="status"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script>
