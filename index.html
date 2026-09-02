@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#071923">
-<title>Aqua Link — Riverside Water Network</title>
+<title>Aqua Link — Water Network</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -19,13 +19,13 @@
   <nav class="desktop-nav" aria-label="Main navigation">
     <a class="active" href="#home">Overview</a><a href="#map">Live Map</a><a href="#report">Report</a><a href="#academy">Academy</a><a href="#community">Community</a>
   </nav>
-  <div class="top-actions"><button class="icon-btn" id="notifyBtn" aria-label="Notifications">◔<i></i></button><button class="profile-mini" id="profileOpen"><span id="navAvatar">O</span><b id="navName">Onthatile</b><span>⌄</span></button><button class="auth-btn" id="authOpen">Sign in</button></div>
+  <div class="top-actions"><button class="icon-btn" id="notifyBtn" aria-label="Notifications">◔<i></i></button><button class="profile-mini" id="profileOpen"><span id="navAvatar">O</span><b id="navName">Profile</b><span>⌄</span></button><button class="auth-btn" id="authOpen">Sign in</button></div>
 </header>
 
 <main id="app">
 <section id="home" class="view active-view">
   <div class="dashboard-head">
-    <div><div class="kicker">TUESDAY · 01 SEPT 2026 · RIVERSIDE HIGH</div><h1>Good morning,<br><span id="heroName">Onthatile.</span></h1><p class="subhead">The network is moving. Here’s what needs your attention.</p></div>
+    <div><div class="kicker">AQUA LINK · WATER NETWORK</div><h1><span id="greeting">Good afternoon.</span><br><span id="heroName">Your water network is waiting.</span></h1><p class="subhead">See what’s happening, report what you find, learn, connect and make an impact.</p></div>
     <div class="network-badge"><span class="pulse"></span><div><b>NETWORK LIVE</b><small>School + community</small></div></div>
   </div>
 
@@ -54,7 +54,7 @@
 </section>
 
 <section id="map" class="view">
-  <div class="view-head"><div><span class="kicker">LIVE WATER GRID</span><h1>Put the network<br><span>on the map.</span></h1><p>Riverside High · 1 Hawthorne St, Three Rivers, Vereeniging</p></div><button class="cta" data-go="#report">＋ Report issue</button></div>
+  <div class="view-head"><div><span class="kicker">LIVE WATER GRID</span><h1>Put the network<br><span>on the map.</span></h1><p id="mapContext">Your school network · location appears after profile setup</p></div><button class="cta" data-go="#report">＋ Report issue</button></div>
   <div class="map-layout"><div class="map-box"><div id="mapCanvas"></div><div class="map-controls"><button class="active" data-map-filter="all">All</button><button data-map-filter="open">Open</button><button data-map-filter="resolved">Resolved</button></div></div>
   <aside class="map-sidebar"><div class="side-head"><span class="section-tag">NETWORK STATUS</span><strong>6 monitored zones</strong></div><div id="zoneList"></div><div class="legend"><span><i class="dot open"></i> Open</span><span><i class="dot investigating"></i> Investigating</span><span><i class="dot resolved"></i> Resolved</span></div></aside></div>
 </section>
@@ -74,7 +74,7 @@
 </section>
 
 <section id="community" class="view">
-  <div class="view-head"><div><span class="kicker">SCHOOL + COMMUNITY</span><h1>The water team<br><span>is bigger.</span></h1><p>Local observation becomes stronger when people can see the same picture.</p></div><div class="community-stat"><strong>47</strong><span>WATER<br>WATCHERS</span></div></div>
+  <div class="view-head"><div><span class="kicker">COMMUNITY NETWORK</span><h1>The water team<br><span>is bigger.</span></h1><p>Local observation becomes stronger when people can see the same picture.</p></div><div class="community-stat"><strong>47</strong><span>WATER<br>WATCHERS</span></div></div>
   <div class="community-grid"><article class="community-main"><div class="community-photo"><img src="https://images.unsplash.com/photo-1509099836639-18ba02c6d0c7?auto=format&fit=crop&w=900&q=75" alt="Young people working together"></div><div class="community-copy"><span class="section-tag">SEVEN-DAY WATER SHIFT</span><h2>Seven days.<br>One shared experiment.</h2><p>During Water Monitoring Day, the school and community can log observations, complete challenges and reveal what changed over seven days.</p><button class="cta" id="joinChallenge">Join the 7-day shift <span>→</span></button></div></article>
   <aside class="community-side"><span class="section-tag">WHO CONNECTS</span><div class="person-row"><span class="avatar purple">L</span><div><b>Learners</b><small>Observe · report · learn</small></div></div><div class="person-row"><span class="avatar aqua">T</span><div><b>Teachers</b><small>Guide · verify · support</small></div></div><div class="person-row"><span class="avatar orange">W</span><div><b>Water mentors</b><small>Explain · investigate · build</small></div></div><div class="person-row"><span class="avatar green">C</span><div><b>Community</b><small>Share local knowledge</small></div></div><a class="dws-link" href="#services">Need official water information? <b>Open Water Services →</b></a></aside></div>
 </section>
@@ -93,7 +93,7 @@
 <div class="mobile-nav"><a class="active" href="#home">⌂<span>Home</span></a><a href="#map">⌖<span>Map</span></a><a href="#report" class="mobile-report">＋</a><a href="#academy">◇<span>Academy</span></a><button id="mobileProfile">◉<span>Profile</span></button></div>
 
 <div class="modal" id="authModal" aria-hidden="true"><div class="modal-card auth-card"><button class="modal-close" id="authClose">×</button><span class="section-tag">AQUA LINK ACCOUNT</span><h2 id="authTitle">Sign in to your network</h2><p class="auth-copy">Use an email address and password to sync your reports, missions and profile across devices. Keep your account details minimal.</p><label>Email<input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters"></label><button class="cta wide" id="authSubmit">Sign in</button><button class="auth-switch" id="authSwitch">Need an account? Create one</button><p class="auth-status" id="authStatus"></p></div></div>
-<div class="modal" id="profileModal" aria-hidden="true"><div class="modal-card"><button class="modal-close" id="profileClose">×</button><span class="section-tag">YOUR PROFILE</span><div class="profile-big"><span id="bigAvatar">O</span><div><h2 id="profileTitle">Onthatile</h2><p id="profileRole">Learner · Riverside High School</p></div></div><label>Display name<input id="profileInput" maxlength="28"></label><button class="cta wide" id="saveProfile">Save profile</button><div class="profile-stats"><span><b id="pReports">2</b>Reports</span><span><b id="pMissions">3</b>Missions</span><span><b>170</b>XP</span></div></div></div>
+<div class="modal" id="profileModal" aria-hidden="true"><div class="modal-card"><button class="modal-close" id="profileClose">×</button><span class="section-tag">YOUR PROFILE</span><div class="profile-big"><span id="bigAvatar">O</span><div><h2 id="profileTitle">Your profile</h2><p id="profileRole">Set up your profile</p></div></div><label>Display name<input id="profileInput" maxlength="28"></label><button class="cta wide" id="saveProfile">Save profile</button><div class="profile-stats"><span><b id="pReports">2</b>Reports</span><span><b id="pMissions">3</b>Missions</span><span><b>170</b>XP</span></div></div></div>
 <div id="toast" role="status"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script>
 </body></html>

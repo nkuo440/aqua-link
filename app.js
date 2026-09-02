@@ -81,7 +81,7 @@ const missions=[
 ["Map the Flow","Trace where water enters, moves through and leaves your school.",70,"SCIENCE"]
 ];
 const get=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
-const profile=()=>get(KEY.profile,{name:"Onthatile",role:"Learner",school:"Riverside High School"});
+const profile=()=>get(KEY.profile,{name:"",role:"Learner",school:""});
 const reports=()=>get(KEY.reports,seedReports);
 const completed=()=>get(KEY.missions,[0,1,2]);
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
@@ -96,11 +96,16 @@ function render(){
  window.scrollTo({top:0,behavior:"smooth"});
  if(hash==="#map")setTimeout(initMap,50);
 }
+function getGreeting(){const h=new Date().getHours();if(h>=5&&h<12)return "Good morning.";if(h>=12&&h<18)return "Good afternoon.";if(h>=18&&h<22)return "Good evening.";return "Good night.";}
+function updateGreeting(){const e=qs("#greeting");if(e)e.textContent=getGreeting();}
 function updateProfileUI(){
- const p=profile(), initial=(p.name||"O")[0].toUpperCase();
+ const p=profile(), name=(p.name||"").trim(), initial=name?name[0].toUpperCase():"A";
  ["#navAvatar","#bigAvatar"].forEach(s=>{const e=qs(s);if(e)e.textContent=initial});
- ["#navName","#heroName","#profileTitle"].forEach(s=>{const e=qs(s);if(e)e.textContent=s==="#heroName"?p.name+".":p.name});
- if(qs("#profileRole"))qs("#profileRole").textContent=`${p.role} · ${p.school}`;
+ const nav=qs("#navName");if(nav)nav.textContent=name||"Profile";
+ const hero=qs("#heroName");if(hero)hero.textContent=name?name+".":"Your water network is waiting.";
+ const title=qs("#profileTitle");if(title)title.textContent=name||"Your profile";
+ const role=qs("#profileRole");if(role)role.textContent=p.school?`${p.role||"Learner"} · ${p.school}`:"Set up your profile";
+ updateGreeting();
 }
 function renderActivity(){
  const box=qs("#activityFeed"); if(!box)return;
@@ -152,7 +157,7 @@ function reportInit(){
 }
 function profileInit(){
  const modal=qs("#profileModal");
- function open(){const p=profile();qs("#profileInput").value=p.name;modal.classList.add("show");modal.setAttribute("aria-hidden","false")}
+ function open(){const p=profile();qs("#profileInput").value=p.name||"";modal.classList.add("show");modal.setAttribute("aria-hidden","false")}
  function close(){modal.classList.remove("show");modal.setAttribute("aria-hidden","true")}
  qs("#profileOpen").addEventListener("click",open);qs("#mobileProfile").addEventListener("click",open);qs("#profileClose").addEventListener("click",close);
  qs("#saveProfile").addEventListener("click",()=>{const p=profile();const n=qs("#profileInput").value.trim();if(!n)return;const next={...p,name:n};save(KEY.profile,next);updateProfileUI();syncCloudProfile(next);close();toast("Profile updated ✓")});
@@ -164,6 +169,6 @@ document.addEventListener("DOMContentLoaded",()=>{
  document.querySelectorAll("[data-map-filter]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-map-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");drawMarkers(b.dataset.mapFilter)}));
  qs("#joinChallenge").addEventListener("click",()=>{completeMission(3);toast("7-day Water Shift joined ✓")});
  qs("#notifyBtn").addEventListener("click",()=>toast("2 network updates waiting"));
- window.addEventListener("hashchange",render);render();
+ window.addEventListener("hashchange",render);window.addEventListener("focus",updateGreeting);setInterval(updateGreeting,60000);render();
 });
 window.completeMission=completeMission;
